@@ -1,0 +1,122 @@
+#!/bin/bash
+band(){ #defining band as function for bands
+echo "-------******BANDS******------------"
+echo -e "||BEA for Beatles||\n|| AD for AC/DC ||\n|| QUE for Queen ||\n|| BLO for Blondie ||\n|| NIR for Nirvana ||"
+}
+members(){ #defining members as function for member
+echo "--------*****MEMBERS*****-------------"
+echo -e "|| JL for JohnLennon ||\n|| AY for AngusYoung ||\n|| FM for FreddieMercury ||\n|| DH for DebbieHarry ||\n|| KC for KurtCobain ||"
+}
+b=0
+cc=true
+again(){ #function which holds program to resume
+echo "Would you like to continue: "
+read continue
+if [[ -z "$continue" ]] #checking empty string
+then
+echo "empty value"
+again
+elif [[ "$continue" == @(yes|Y|y|Yes) ]]
+then
+repeat
+elif [[ "$continue" == @(no|N|n|NO) ]]
+then
+exit
+else
+echo "wrong value."
+again
+fi
+}
+while [[ “$b” -lt 3 ]] #using while loop 3 times incase of incorrect secret key
+do
+echo -e "What is your secret key?:\c"
+read key
+if [[ "$key" == "12345" ]]
+then
+echo "--------******--------"
+echo "--------WELCOME-------"
+echo -e "Enter your name?:\c"
+read name
+echo -e "Enter your id?:\c"
+read id
+echo "--------Your name is ${name} and id is ${id}------Today's Date:$(date)--------"
+while [[ "$cc" == true ]] #checking whether the condition is true or false
+do
+band
+three(){ #defining function three
+members
+echo -e "Choose any three members:\c"
+read member1 member2 member3
+string="$member1 $member2 $member3" #bounding three string as one
+length=$(echo "$string" |wc -w) #length of string
+if [ -z "$member1" ] || [ -z "$member2" ] || [ -z "$member3" ] #using if statement to check empty value
+then
+echo "Sorry! Choose Three members:"
+three
+elif [[ $member1 == @($member2|member3) || $member2 == @($member1|$member3) || $member3 == @(member1|$member2) ]] #checking condition
+then
+echo "Sorry!! Your input holds same member."
+three
+elif [[ $member1 != @(JL|AY|FM|DH|KC) || $member2 != @(JL|AY|FM|DH|KC) || $member3 != @(JL|AY|FM|DH|KC) ]] #checking the condition
+then
+echo "Sorry! error membercode Occured."
+three
+else
+echo "Your selected member are $member1 $member2 $member3"
+best member1 member2 member3
+break
+fi
+}
+best(){ #defining function best
+echo "Choose your favourite member:"
+select member in $member1 $member2 $member3 #selects only one player
+do
+case $member in #using case statements
+"JL") cat JohnLennon #displaying contents of JohnLennon
+again
+;;
+"AY") cat AngusYoung #displaying contents of AngusYoung
+again
+;;
+"FM") cat FreddieMercury #displaying contents of FreddieMercury
+again
+;;
+"DH") echo "Sorry!!! For DebbieHarry, File is not available."
+repeat
+;;
+"KC") echo "Sorry!!! For KurtCobain, File is not available."
+repeat
+;;
+*) echo "Enter valid number" #message for invalid input
+esac
+done
+}
+repeat(){
+band="" #defining band as variable
+until [[ "$band" == "BEA" ]] #checks correct band using until loop
+do
+echo -e "Select the best band:"
+read band
+case $band in #case statement
+"BEA") echo "Beatles band is ${name}'s favourite band."
+;;
+"AD") echo "AC/DC band is one of the best band."
+;;
+"QUE") echo "Queen band is one of the best band."
+;;
+"BLO") echo "Blondie band is one of the best band."
+;;
+"NIR") echo "Nirvana band is one of the best band."
+;;
+*) echo "Your input donot match.";;
+esac
+done
+three
+}
+repeat
+done
+else
+echo "Secret Key doesnot match!" #message displaying
+fi
+b=$(($b+1))
+done
